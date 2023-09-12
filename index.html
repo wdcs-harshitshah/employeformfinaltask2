@@ -1,0 +1,84 @@
+<!-- EMPLOYEE FORM -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Details</title>
+    
+</head>
+<body>
+    <fieldset>Employee Form
+    <legend><h1>Employee Details</h1></legend>
+    <form id="employee-form" autocomplete="off">
+        <input type="text" id="name" placeholder="Enter Employee Name" required>
+        <input type="number" id="salary" placeholder="Enter Your Salary" required>
+        <button type="submit">Add Employee</button>
+    </form>
+    <div id="employee-list"></div>
+</fieldset>
+
+    <script>
+        const employeeForm = document.getElementById("employee-form");
+        const nameInput = document.getElementById("name");
+        const salaryInput = document.getElementById("salary");
+        const employeeList = document.getElementById("employee-list");
+
+        let employees = [];
+
+        function displayEmployees() {
+            employeeList.innerHTML = "";
+            employees.forEach((employee, index) => {
+                const employeeItem = document.createElement("div");
+                employeeItem.innerHTML = `
+                    <strong>${employee.name}</strong> - ${employee.salary}
+                    <button onclick="editEmployee(${index})">Edit</button>
+                    <button onclick="deleteEmployee(${index})">Delete</button>
+                `;
+                employeeList.appendChild(employeeItem);
+            });
+        }
+
+       
+        function addEmployee(name, salary) {
+            employees.push({ name, salary});
+            displayEmployees();
+        }
+
+      
+        function editEmployee(index) {
+            const updatedName = prompt("Enter the updated name:");
+            const updatedSalary= prompt("Enter the updated salary:");
+            if (updatedName !== null && updatedSalary !== null) {
+                employees[index].name = updatedName;
+                employees[index].position = updatedSalary;
+                displayEmployees();
+            }
+        }
+
+        
+        function deleteEmployee(index) {
+            if (confirm("Are you sure you want to delete this employee?")) {
+                employees.splice(index, 1);
+                displayEmployees();
+            }
+        }
+
+       
+        employeeForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const name = nameInput.value;
+            const salary= salaryInput.value;
+            if (name && salary) {
+                addEmployee(name, salary);
+                nameInput.value = "";
+                salaryInput.value = "";
+            }
+        });
+
+        
+        displayEmployees();
+    </script>
+</body>
+</html>
