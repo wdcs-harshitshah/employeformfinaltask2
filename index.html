@@ -17,6 +17,8 @@
         <button type="submit">Add Employee</button>
     </form>
     <div id="employee-list"></div>
+    <label for="search">Search:</label>
+    <input type="text" id="search" onkeyup="searchEmployees()" placeholder="Search by name or salary">
 </fieldset>
 
     <script>
@@ -24,6 +26,7 @@
         const nameInput = document.getElementById("name");
         const salaryInput = document.getElementById("salary");
         const employeeList = document.getElementById("employee-list");
+        const searchInput = document.getElementById("search");
 
         let employees = [];
 
@@ -63,6 +66,29 @@
                 employees.splice(index, 1);
                 displayEmployees();
             }
+        }
+        
+        function searchEmployees() {
+            const query = searchInput.value.toLowerCase();
+            const filteredEmployees = employees.filter((employee) => {
+                const name = employee.name.toLowerCase();
+                const salary = employee.salary.toString().toLowerCase();
+                return name.includes(query) || salary.includes(query);
+            });
+            displayFilteredEmployees(filteredEmployees);
+        }
+
+        function displayFilteredEmployees(filteredEmployees) {
+            employeeList.innerHTML = "";
+            filteredEmployees.forEach((employee, index) => {
+                const employeeItem = document.createElement("div");
+                employeeItem.innerHTML = `
+                    <strong>${employee.name}</strong> - ${employee.salary}
+                    <button onclick="editEmployee(${index})">Edit</button>
+                    <button onclick="deleteEmployee(${index})">Delete</button>
+                `;
+                employeeList.appendChild(employeeItem);
+            });
         }
 
        
